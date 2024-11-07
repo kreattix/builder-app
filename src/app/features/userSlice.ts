@@ -1,11 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import { JwtToken } from '../../pages/Authentication'
+
 export interface User {
-  id: string
   firstName: string
   lastName: string
   fullName: string
   email: string
+  profile: string
 }
 
 export interface UserState {
@@ -15,13 +17,7 @@ export interface UserState {
 }
 
 const initialState: UserState = {
-  user: {
-    id: '1',
-    firstName: 'Prince',
-    lastName: 'Patel',
-    fullName: 'Prince Patel',
-    email: 'prince@gmail.com'
-  },
+  user: null,
   sessionExpiry: null,
   accessToken: null
 }
@@ -30,8 +26,15 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    SignedIn(state, action: PayloadAction<User>) {
-      state.user = action.payload
+    SignedIn(state, action: PayloadAction<JwtToken>) {
+      state.user = {
+        email: action.payload.email,
+        fullName: action.payload.name,
+        firstName: action.payload.given_name,
+        lastName: action.payload.family_name,
+        profile: action.payload.picture
+      }
+      state.sessionExpiry = action.payload.exp * 1000
     },
     SignedOut(state) {
       state.user = null
