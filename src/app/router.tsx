@@ -10,5 +10,6 @@ export const ungaurdedRoutes = createBrowserRouter([
 
 export const guardedRoutes = createBrowserRouter([
   { path: '/', element: <Project /> },
+  { path: '/project', element: <Project /> },
   { path: '*', element: <div>Not Found</div> }
 ])

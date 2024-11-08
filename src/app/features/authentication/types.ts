@@ -11,6 +11,7 @@ export interface AuthenticatedUser {
   name: string
   email: string
   google_id: string
+  picture: string
 }
 
 export interface AuthenticationState {

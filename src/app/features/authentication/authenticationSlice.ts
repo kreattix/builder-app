@@ -37,7 +37,6 @@ const authenticationSlice = createSlice({
       state.accessToken = action.payload.access_token
       state.tokenType = action.payload.token_type
       state.isAuthenticating = false
-      api.defaults.headers.common.Authorization = `${action.payload.token_type} ${action.payload.access_token}`
     })
     builder.addCase(authenticateUser.rejected, (state) => {
       Object.assign(state, initialState)
