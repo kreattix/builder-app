@@ -1,14 +1,13 @@
-import { SignedOut } from '../app/features/userSlice'
-import { useAppDispatch, useUserSelector } from '../app/hooks'
+import { signedOut } from '../app/features/authentication/authenticationSlice'
+import { useAppDispatch, useAuthSelector } from '../app/hooks'
 
 export const Project = () => {
   const dispatch = useAppDispatch()
-  const { user } = useUserSelector()
+  const { authenticatedUser } = useAuthSelector()
   return (
     <div>
-      Project {user?.firstName}
-      <img alt="" src={user?.profile} />
-      <button onClick={() => dispatch(SignedOut())}>Logout</button>
+      Project {authenticatedUser?.firstname}
+      <button onClick={() => dispatch(signedOut())}>Logout</button>
     </div>
   )
 }

@@ -1,15 +1,29 @@
+import { useEffect } from 'react'
 import { RouterProvider } from 'react-router-dom'
 
-import { useUserSelector } from './app/hooks'
+import { getAuthenticatedUser } from './app/features/authentication/authenticationSlice'
+import { useAppDispatch, useAuthSelector } from './app/hooks'
 import { router } from './app/router'
-import { Authentication } from './pages/Authentication'
+import { CustomLogin } from './pages/CustomLogin'
 
 const App = () => {
-  const { user } = useUserSelector()
-  if (user) {
-    return <RouterProvider router={router} />
+  const dispatch = useAppDispatch()
+  const { accessToken, authenticatedUser } = useAuthSelector()
+
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(getAuthenticatedUser())
+    }
+  }, [accessToken, dispatch])
+
+  if (accessToken) {
+    if (authenticatedUser) {
+      return <RouterProvider router={router} />
+    } else {
+      return <div>Loading</div>
+    }
   } else {
-    return <Authentication />
+    return <CustomLogin />
   }
 }
 
