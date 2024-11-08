@@ -3,8 +3,7 @@ import { RouterProvider } from 'react-router-dom'
 
 import { getAuthenticatedUser } from './app/features/authentication/authenticationSlice'
 import { useAppDispatch, useAuthSelector } from './app/hooks'
-import { router } from './app/router'
-import { CustomLogin } from './pages/CustomLogin'
+import { guardedRoutes, ungaurdedRoutes } from './app/router'
 
 const App = () => {
   const dispatch = useAppDispatch()
@@ -16,15 +15,7 @@ const App = () => {
     }
   }, [accessToken, dispatch])
 
-  if (accessToken) {
-    if (authenticatedUser) {
-      return <RouterProvider router={router} />
-    } else {
-      return <div>Loading</div>
-    }
-  } else {
-    return <CustomLogin />
-  }
+  return <RouterProvider router={authenticatedUser ? guardedRoutes : ungaurdedRoutes} />
 }
 
 export default App

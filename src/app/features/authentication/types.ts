@@ -17,4 +17,5 @@ export interface AuthenticationState {
   authenticatedUser: AuthenticatedUser | null
   accessToken: string | null
   tokenType: string | null
+  isAuthenticating: boolean
 }

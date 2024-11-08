@@ -1,10 +1,11 @@
 import { TokenResponse, useGoogleLogin } from '@react-oauth/google'
 
 import { authenticateUser } from '../app/features/authentication/authenticationSlice'
-import { useAppDispatch } from '../app/hooks'
+import { useAppDispatch, useAuthSelector } from '../app/hooks'
 
 export const CustomLogin = () => {
   const dispatch = useAppDispatch()
+  const { isAuthenticating } = useAuthSelector()
   const onSuccess = (response: TokenResponse) => {
     if (response.access_token) {
       dispatch(authenticateUser(response.access_token))
@@ -15,5 +16,13 @@ export const CustomLogin = () => {
 
   const login = useGoogleLogin({ onSuccess })
 
-  return <button onClick={() => login()}>Login with Google Account</button>
+  const onLogin = () => {
+    if (!isAuthenticating) login()
+  }
+
+  return (
+    <button onClick={onLogin}>
+      {isAuthenticating ? 'Loading' : 'Login with Google Account'}
+    </button>
+  )
 }

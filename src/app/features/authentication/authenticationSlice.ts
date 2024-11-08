@@ -6,7 +6,8 @@ import { AuthenticatedUser, AuthenticationResponse, AuthenticationState } from '
 export const initialState: AuthenticationState = {
   authenticatedUser: null,
   accessToken: null,
-  tokenType: null
+  tokenType: null,
+  isAuthenticating: false
 }
 
 export const authenticateUser = createAsyncThunk<AuthenticationResponse, string>(
@@ -29,17 +30,25 @@ const authenticationSlice = createSlice({
     }
   },
   extraReducers(builder) {
+    builder.addCase(authenticateUser.pending, (state) => {
+      state.isAuthenticating = true
+    })
     builder.addCase(authenticateUser.fulfilled, (state, action) => {
       state.accessToken = action.payload.access_token
       state.tokenType = action.payload.token_type
+      state.isAuthenticating = false
       api.defaults.headers.common.Authorization = `${action.payload.token_type} ${action.payload.access_token}`
     })
     builder.addCase(authenticateUser.rejected, (state) => {
       Object.assign(state, initialState)
       api.defaults.headers.common.Authorization = undefined
     })
+    builder.addCase(getAuthenticatedUser.pending, (state) => {
+      state.isAuthenticating = true
+    })
     builder.addCase(getAuthenticatedUser.fulfilled, (state, action) => {
       state.authenticatedUser = action.payload
+      state.isAuthenticating = false
     })
     builder.addCase(getAuthenticatedUser.rejected, (state) => {
       Object.assign(state, initialState)
